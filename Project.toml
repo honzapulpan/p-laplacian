@@ -4,6 +4,7 @@ name = "Eigenvalue bounds of p-Laplacian"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 DrWatson = "634d3b9d-ee7a-5ddf-bec9-22491ea816e1"
 JLD2 = "033835bb-8acc-5ee8-8aae-3f567f8a3819"
+PrettyTables = "08abe8d2-0d0c-5749-adfa-8a2ac140af0d"
 
 [compat]
 DrWatson = "2.9.1"
