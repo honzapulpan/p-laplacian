@@ -12,7 +12,7 @@ using Gridap.ReferenceFEs
 using Dates
 
 
-function pl_num_eigenpair(p, mesh, order, degree)
+function pl_num_eigenpair(p, mesh, order, degree, itnum)
     # start time measure
     startt = Dates.now()
 
@@ -50,12 +50,14 @@ function pl_num_eigenpair(p, mesh, order, degree)
     x = rand(Float64,num_free_dofs(Ug))
     uh0 = FEFunction(Ug,x)
     uh, = solve!(uh0,solver,op)
-
+    
     # algorithm
     q = p-.01
     pts = get_node_coordinates(Ω) # potřebujeme k evaluaci řešení v uzlových bodech
 
-    for m in 0:8
+    λs = [(1/(maximum(abs.(lazy_map(uh,pts))))^(p-1)),]
+    
+    for m in 0:itnum-2
         uhsup = maximum(abs.(lazy_map(uh,pts)))
         raiseprw(g1,g2) = g1*(g2/uhsup)^(q-1)
         res(u,v) = ∫( ∇(v)⊙(flux∘∇(u)) - raiseprw∘(v,uh) )*dΩ
@@ -65,6 +67,7 @@ function pl_num_eigenpair(p, mesh, order, degree)
         x = rand(Float64,num_free_dofs(Ug))
         uh0 = FEFunction(Ug,x)
         uh, = solve!(uh0,solver,op);
+        append!(λs, (1/(maximum(abs.(lazy_map(uh,pts))))^(p-1)))
 
     end
 
@@ -73,5 +76,5 @@ function pl_num_eigenpair(p, mesh, order, degree)
 
     stopt = Dates.now()
     runtime = Dates.canonicalize(Dates.CompoundPeriod(stopt-startt))
-    return λ₁, runtime
+    return λ₁, runtime, λs
 end
