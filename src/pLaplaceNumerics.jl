@@ -66,6 +66,7 @@ function plaplace_solve(λᵢₙᵢₜ, p, n; u₂0=1.0, dom=(0.0, 1.0))
     prob = ODEProblem(sl, u0, dom, (Λ₁, p))
     sol = solve(prob, saveat=Δt, abstol=1e-8,reltol=1e-8)
     
+    #t = collect(LinRange(tl,tr,n-1))
     t = collect(LinRange(0,1,n-1))
     #tᴵ = [@interval(i) for i in t]
     tᴵ = []
